@@ -26,15 +26,15 @@ const placeType = new GraphQLObjectType({
     _id: { type: GraphQLID },
     title: { type: GraphQLString },
     city: { type: GraphQLString },
-    owner_id: { tpye: GraphQLID },
+    owner_id: { type: GraphQLID },
     owner: {
-      tpye: ownerType,
+      type: ownerType,
       async resolve(parent, args) {
         return await ownerController.getOwner({ id: parent.owner_id });
       }
     },
     tenants: {
-      tpye: new GraphQLList(tenantType),
+      type: new GraphQLList(tenantType),
       async resolve(parent, args) {
         return await tenantController.getPlaceTenants({ id: parent._id });
       }
@@ -45,22 +45,46 @@ const placeType = new GraphQLObjectType({
 // Owner Type
 const ownerType = new GraphQLObjectType({
   name: "Owner",
-  fields: () => ({})
+  fields: () => ({
+    _id: { type: GraphQLID },
+    title: { type: GraphQLString }
+  })
 });
 
 // Tenant Type
 const tenantType = new GraphQLObjectType({
   name: "Tenant",
-  fields: () => ({})
+  fields: () => ({
+    _id: { type: GraphQLID },
+    title: { type: GraphQLString }
+  })
 });
 
 // Root Query
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
   fields: {
-    place: {},
-    owner: {},
-    tenant: {}
+    place: {
+      type: placeType,
+      args: { id: { type: GraphQLID } },
+      async resolve(parent, args) {
+        return await placeController.getPlace(args);
+      }
+    },
+    owner: {
+      type: ownerType,
+      args: { id: { type: GraphQLID } },
+      async resolve(parent, args) {
+        return await ownerController.getOwner(args);
+      }
+    },
+    tenant: {
+      type: tenantType,
+      args: { id: { type: GraphQLID } },
+      async resolve(parent, args) {
+        return await tenantController.getTenant(args);
+      }
+    }
   }
 });
 
@@ -69,7 +93,7 @@ const Mutations = new GraphQLObjectType({
   name: "Mutations",
   fields: {
     addPlace: {
-      tpye: placeType,
+      type: placeType,
       args: {},
       async resolve(args) {
         return "";

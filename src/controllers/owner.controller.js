@@ -2,12 +2,13 @@
 module.exports.getOwner = async function(req, res, next) {
     try {
         // get assigned orders
-        let couier = await courierService.getCourier(req.body);
+        // let couier = await courierService.getCourier(req.body);
+        const owner = 'Mehmet Akın';
 
-        return res.json({
+        return await res.json({
             success: true,
             status: 201,
-            data: couier
+            data: owner
         });
 
     } catch (error) {
