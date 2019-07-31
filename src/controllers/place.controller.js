@@ -1,16 +1,15 @@
+const PlaceService = require("../services/place.service");
+
 module.exports.getPlace = async function(req, res, next) {
   try {
-    // get assigned orders
-    const place = [
-      {
-        _id: "3232323",
-        title: "title 1",
-        city: "Ankara",
-        owner_id: "343434"
-      }
-    ];
-    // await courierService.getCourier(req.body);
-    return await res.json({
+    const id = req.params === undefined ? req.id : req.params.id;
+
+    const place = await PlaceService.getPlace(id);
+
+    return place;
+    console.log(place);
+
+    return res.json({
       success: true,
       status: 201,
       data: place
@@ -19,7 +18,44 @@ module.exports.getPlace = async function(req, res, next) {
     return res.json({
       success: false,
       status: 400,
-      message: "Unable to get couier",
+      message: "Unable to get place",
+      errorMessage: error.message
+    });
+  }
+};
+
+module.exports.createPlace = async function(req, res, next) {
+  try {
+    const createdPlace = await PlaceService.createPlace(req.body);
+
+    return res.json({
+      success: true,
+      status: 201,
+      data: createdPlace
+    });
+  } catch (error) {
+    return res.json({
+      success: false,
+      status: 400,
+      message: "Unable to create",
+      errorMessage: error.message
+    });
+  }
+};
+
+module.exports.getPlaceTenants = async function(req, res, next) {
+  try {
+    const id = req.params === undefined ? req.id : req.params.id;
+
+    const placeTenants = await PlaceService.getPlaceTenants(id);
+    console.log(placeTenants);
+
+    return placeTenants;
+  } catch (error) {
+    return res.json({
+      success: false,
+      status: 400,
+      message: "Unable to get place",
       errorMessage: error.message
     });
   }

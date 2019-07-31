@@ -1,22 +1,42 @@
+const OwnerService = require("../services/owner.service");
+
 // Getting courier
 module.exports.getOwner = async function(req, res, next) {
-    try {
-        // get assigned orders
-        // let couier = await courierService.getCourier(req.body);
-        const owner = 'Mehmet Akın';
+  try {
+    const id = req.params === undefined ? req.id : req.params.id;
+    const owner = await OwnerService.getOwner(id);
+    return owner;
+    
+    return await res.json({
+      success: true,
+      status: 201,
+      data: owner
+    });
+  } catch (error) {
+    return res.json({
+      success: false,
+      status: 400,
+      message: "Unable to get owner",
+      errorMessage: error.message
+    });
+  }
+};
 
-        return await res.json({
-            success: true,
-            status: 201,
-            data: owner
-        });
+module.exports.createOwner = async function(req, res, next) {
+  try {
+    const createdOwner = await OwnerService.createOwner(req.body);
 
-    } catch (error) {
-        return res.json({
-            success: false,
-            status: 400,
-            message: 'Unable to get couier',
-            errorMessage: error.message
-        });
-    }
-}
+    return res.json({
+      success: true,
+      status: 201,
+      data: createdOwner
+    });
+  } catch (error) {
+    return res.json({
+      success: false,
+      status: 400,
+      message: "Unable to create",
+      errorMessage: error.message
+    });
+  }
+};

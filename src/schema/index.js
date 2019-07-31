@@ -26,19 +26,26 @@ const placeType = new GraphQLObjectType({
     _id: { type: GraphQLID },
     title: { type: GraphQLString },
     city: { type: GraphQLString },
-    owner_id: { type: GraphQLID },
+    ownerId: { type: GraphQLID },
+    tenantId: { type: GraphQLID },
     owner: {
       type: ownerType,
       async resolve(parent, args) {
-        return await ownerController.getOwner({ id: parent.owner_id });
+        return await ownerController.getOwner({ id: parent.ownerId });
       }
     },
-    tenants: {
-      type: new GraphQLList(tenantType),
+    tenant: {
+      type: tenantType,
       async resolve(parent, args) {
-        return await tenantController.getPlaceTenants({ id: parent._id });
+        return await tenantController.getTenant({ id: parent.tenantId });
       }
     }
+    // tenants: {
+    //   type: new GraphQLList(tenantType),
+    //   async resolve(parent, args) {
+    //     return await placeController.getPlaceTenants({ id: parent._id });
+    //   }
+    // }
   })
 });
 
@@ -47,7 +54,9 @@ const ownerType = new GraphQLObjectType({
   name: "Owner",
   fields: () => ({
     _id: { type: GraphQLID },
-    title: { type: GraphQLString }
+    name: { type: GraphQLString },
+    surname: { type: GraphQLString },
+    age: { type: GraphQLInt }
   })
 });
 
@@ -56,7 +65,9 @@ const tenantType = new GraphQLObjectType({
   name: "Tenant",
   fields: () => ({
     _id: { type: GraphQLID },
-    title: { type: GraphQLString }
+    name: { type: GraphQLString },
+    surname: { type: GraphQLString },
+    age: { type: GraphQLInt }
   })
 });
 
