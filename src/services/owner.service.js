@@ -1,10 +1,7 @@
 const Owner = require("../models/owner");
 
-const Place = require('../models/place');
-
 module.exports.createOwner = async function(paramOwner) {
   const newOwner = new Owner(paramOwner);
-
   return await newOwner.save();
 };
 

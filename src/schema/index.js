@@ -40,18 +40,6 @@ const placeType = new GraphQLObjectType({
         return await tenantController.getTenant({ id: parent.tenantId });
       }
     }
-    // owners: {
-    //   tpye: new GraphQLList(ownerType),
-    //   async resolve(parent , args) {
-    //     return await getPlaceOwners
-    //   }
-    // }
-    // tenants: {
-    //   type: new GraphQLList(tenantType),
-    //   async resolve(parent, args) {
-    //     return await placeController.getPlaceTenants({ id: parent._id });
-    //   }
-    // }
   })
 });
 
@@ -62,7 +50,8 @@ const ownerType = new GraphQLObjectType({
     _id: { type: GraphQLID },
     name: { type: GraphQLString },
     surname: { type: GraphQLString },
-    age: { type: GraphQLInt }
+    age: { type: GraphQLInt },
+    
   })
 });
 

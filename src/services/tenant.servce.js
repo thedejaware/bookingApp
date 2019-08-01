@@ -11,4 +11,3 @@ module.exports.getTenant = async function(id) {
   return tenant;
 };
 
-
