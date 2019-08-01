@@ -29,3 +29,8 @@ module.exports.getPlaceTenants = async function(id) {
   ]);
   return tenants;
 };
+
+module.exports.getPlaces = async function() {
+  const places = await Place.find();
+  return places;
+}

@@ -24,15 +24,24 @@ module.exports.getPlace = async function(req, res, next) {
   }
 };
 
+module.exports.getPlaces = async function(req, res, next) {
+  try {
+    const places = await PlaceService.getPlaces();
+    return places;
+  } catch (error) {
+    return res.json({
+      success: false,
+      status: 400,
+      message: "Unable to get place",
+      errorMessage: error.message
+    });
+  }
+};
+
 module.exports.createPlace = async function(req, res, next) {
   try {
-    const createdPlace = await PlaceService.createPlace(req.body);
-
-    return res.json({
-      success: true,
-      status: 201,
-      data: createdPlace
-    });
+    const createdPlace = await PlaceService.createPlace(req);
+    return createdPlace;
   } catch (error) {
     return res.json({
       success: false,

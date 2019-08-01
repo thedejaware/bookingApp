@@ -40,6 +40,12 @@ const placeType = new GraphQLObjectType({
         return await tenantController.getTenant({ id: parent.tenantId });
       }
     }
+    // owners: {
+    //   tpye: new GraphQLList(ownerType),
+    //   async resolve(parent , args) {
+    //     return await getPlaceOwners
+    //   }
+    // }
     // tenants: {
     //   type: new GraphQLList(tenantType),
     //   async resolve(parent, args) {
@@ -89,11 +95,16 @@ const RootQuery = new GraphQLObjectType({
         return await ownerController.getOwner(args);
       }
     },
-    tenant: {
-      type: tenantType,
-      args: { id: { type: GraphQLID } },
+    owners: {
+      type: new GraphQLList(ownerType),
       async resolve(parent, args) {
-        return await tenantController.getTenant(args);
+        return await ownerController.getOwners();
+      }
+    },
+    places: {
+      type: new GraphQLList(placeType),
+      async resolve(parent, args) {
+        return await placeController.getPlaces();
       }
     }
   }
@@ -105,9 +116,15 @@ const Mutations = new GraphQLObjectType({
   fields: {
     addPlace: {
       type: placeType,
-      args: {},
-      async resolve(args) {
-        return "";
+      args: {
+        title: { type: GraphQLString },
+        city: { type: GraphQLString },
+        ownerId: { type: new GraphQLNonNull(GraphQLID) },
+        tenantId: { type: new GraphQLNonNull(GraphQLID) }
+      },
+      async resolve(parent, args) {
+        const data = await placeController.createPlace(args);
+        return data;
       }
     },
     editPlace: {
